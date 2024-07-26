@@ -4,13 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To DO</title>
+    <title>TO DO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <style>
     body {
         background: rgb(31, 30, 30);
+        margin: 0;
+        padding: 0;
     }
 
     .container {
@@ -121,6 +123,16 @@
     .eachtaskdone .task{
         text-decoration: line-through;
     }
+    footer{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        padding: 10px 0px;
+        background: rgb(65, 65, 220);
+        color: white;
+        font-weight: bold;
+        text-align: center;
+    }
 </style>
 
 <body>
@@ -132,6 +144,9 @@
         <div id="list" class="delete">
         </div>
     </div>
+    <footer>
+        Designed With <i class="fa fa-heart" style="color: red;"></i> By Sumit
+    </footer>
 </body>
 
 <script>
@@ -193,9 +208,14 @@ newelement.querySelector(".edit").addEventListener("click", function () {
     if (this.classList.contains("editing")) {
         // Save the new task text
         let newInput = currentelement.querySelector(".newInput").value;
+        if(newInput == ""){
+            alert("Please update your task");
+            return;
+        }else{
         taskTextElement.innerHTML = newInput;
         this.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
         this.classList.remove("editing");
+    }
     } else {
         // Switch to edit mode
         let currentText = taskTextElement.textContent;
