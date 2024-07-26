@@ -2,7 +2,8 @@
 # TODO Application
 
 ## Add Task
-![Alt text](https://github.com/kumarsumit2000/NumberGuess/blob/main/Screenshot%202024-07-26%20204735.png)
+
+![Add Task](https://github.com/kumarsumit2000/NumberGuess/blob/main/Screenshot%202024-07-26%20204735.png)
 
 ```html
 <script>
