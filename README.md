@@ -3,106 +3,92 @@
 
 ## Add Task
 
-![Add Task](https://github.com/kumarsumit2000/NumberGuess/blob/main/Screenshot%202024-07-26%20204735.png)
-
 ```html
 <script>
-        let alltasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        let list = document.getElementById("list");
-
-        // Load tasks from local storage
-        function loadTasks() {
-            alltasks.forEach(task => {
-                createTaskElement(task);
-            });
+    let allTasks = [];
+    function add() {
+        let taskInput = document.querySelector("#taskInput").value;
+        let list = document.querySelector("#list");
+        if (taskInput == "") {
+            alert("Please Enter Your Task !");
+        } else {
+            // Adding task to array
+            allTasks.push(taskInput);
+            //Creating task item
+            let newTask = document.createElement("div");
+            newTask.classList.add("eachtask");
+            newTask.innerHTML = `<span><input type="checkbox" class="taskdone"></span>
+            <span class="task">${taskInput}</span>
+            <span id="opButton">
+                <button class="edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="delete"><i class="fa-solid fa-trash"></i></button>
+            </span>`;
+            // Appending task in list
+            list.appendChild(newTask);
+            // Clear input field after append
+            document.querySelector("#taskInput").value = "";
+            //passing referance to delete function
+            deletetask(newTask)
+            //passing referance to taskCompleted function
+            taskCompleted(newTask)
+            //passing referance to editTask function
+            editTask(newTask)
+        }
+        //Deletion operation
+        function deletetask(newTask) {
+            newTask.querySelector(".delete").addEventListener("click", function () {
+                list.removeChild(newTask);
+            })
         }
 
-        function createTaskElement(task) {
-            let newelement = document.createElement("div");
-            newelement.setAttribute("class", "eachtask");
-            newelement.innerHTML = `
-                <span><input type="checkbox" class="taskdone"></span>
-                <span class="task">${task}</span>
-                <span id="opButton">
-                    <button class="edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button class="delete"><i class="fa-solid fa-trash"></i></button>
-                </span>`;
-            list.appendChild(newelement);
-
-            // Attach event listeners
-            attachEventListeners(newelement);
-        }
-
-        function add() {
-            let task = document.querySelector("#task").value;
-            if (task === "") {
-                alert("Please add your task");
-                return;
-            }
-            // Add task to the array
-            alltasks.push(task);
-            // Create a new task element
-            createTaskElement(task);
-            // Clear input field
-            document.querySelector("#task").value = "";
-            // Save tasks to local storage
-            saveTasks();
-        }
-
-        function attachEventListeners(newelement) {
-            // Attach delete event listener
-            newelement.querySelector(".delete").addEventListener("click", function () {
-                let currentelement = this.parentElement.parentElement;
-                let taskText = currentelement.querySelector(".task").textContent;
-                alltasks = alltasks.filter(task => task !== taskText);
-                list.removeChild(currentelement);
-                // Save tasks to local storage
-                saveTasks();
-            });
-
-            // Attach checkbox change event listener
-            newelement.querySelector(".taskdone").addEventListener("change", function (e) {
-                let currentelement = this.parentElement.parentElement;
+        //Completed operation
+        function taskCompleted(newTask) {
+            newTask.querySelector(".taskdone").addEventListener("change", function (e) {
                 if (e.currentTarget.checked) {
-                    currentelement.classList.add("eachtaskdone");
+                    newTask.classList.add("eachtaskdone");
+                    newTask.querySelector(".taskdone").disabled = true;
                 } else {
-                    currentelement.classList.remove("eachtaskdone");
+                    newTask.classList.remove("eachtaskdone");
                 }
-            });
 
-            // Attach edit event listener
-            newelement.querySelector(".edit").addEventListener("click", function () {
-                let currentelement = this.parentElement.parentElement;
-                let taskTextElement = currentelement.querySelector(".task");
+            })
+        }
 
-                if (this.classList.contains("editing")) {
-                    let newInput = currentelement.querySelector(".newInput").value;
-                    if (newInput === "") {
-                        alert("Please update your task");
-                        return;
+        //EditTask
+        function editTask(newTask) {
+            newTask.querySelector(".edit").addEventListener("click", function () {
+                let textElement = newTask.querySelector(".task");
+                let checking = newTask.querySelector(".taskdone");
+                console.log(checking.checked)
+                if (checking.checked) {
+                    alert("Task already marked as completed");
+                }
+                else {
+                    if (this.classList.contains("editing")) {
+                        let newInput = newTask.querySelector(".newInput").value;
+                        if (newInput == "") {
+                            alert("Please update your task !!");
+                        } else {
+                            textElement.innerText = newInput;
+                            this.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+                            this.classList.remove("editing")
+                            alert("Task Updated");
+                        }
+
+                    } else {
+                        this.classList.add("editing");
+                        textElement.innerHTML = `<input type="text" value="${textElement.innerText}" class="newInput">`;
+                        this.innerText = "Save";
                     }
-                    let oldText = taskTextElement.textContent;
-                    taskTextElement.innerHTML = newInput;
-                    alltasks = alltasks.map(task => task === oldText ? newInput : task);
-                    this.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
-                    this.classList.remove("editing");
-                    // Save tasks to local storage
-                    saveTasks();
-                } else {
-                    let currentText = taskTextElement.textContent;
-                    taskTextElement.innerHTML = `<input type="text" value="${currentText}" class="newInput" autofocus/>`;
-                    this.innerHTML = "Save";
-                    this.classList.add("editing");
                 }
-            });
+
+
+            })
         }
 
-        function saveTasks() {
-            localStorage.setItem('tasks', JSON.stringify(alltasks));
-        }
 
-        // Initial load
-        loadTasks();
+    }
+
 </script>
 ```
 
