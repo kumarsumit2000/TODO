@@ -30,7 +30,10 @@ let allTasks = [];
         //Deletion operation
         function deletetask(newTask) {
             newTask.querySelector(".delete").addEventListener("click", function () {
+                let conf = confirm("Are you sure ?");
+                if(conf){
                 list.removeChild(newTask);
+                }
             })
         }
 
